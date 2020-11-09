@@ -55,9 +55,11 @@ app.get('/try-mem', (req, res)=>{
     db.query('SELECT * FROM `member`')
         .then(([results])=>{
             res.json(results);
-            console.log('123')
+            
         })
 });
+
+
 
 
 
