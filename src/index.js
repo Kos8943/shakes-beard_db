@@ -1,15 +1,19 @@
 const express = require('express');
-const app = express();
 const session = require('express-session');
 const MysqlStore = require('express-mysql-session')(session);
 const moment = require('moment-timezone');
 const db = require('./db_connect2');
 const sessionstore = new MysqlStore({}, db)
+const upload = require(__dirname + '/upload-module');
 const cors = require('cors')
 
 
+const app = express();
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }));
 app.use( express.json() );
-app.use( express.json() );
+
+
 const corsOptions = {
     credentials: true,
     origin: function(origin, cb){
@@ -30,29 +34,17 @@ app.use(session({
     }
 }));
 
+
+// app.use(req,res,next){
+
+// }
+
 app.use(express.static('public'));
 
 
 app.get( '/', function(req, res) {
     res.send('Hello World');
 });
-
-app.get('/try-session', (req, res)=>{
-    req.secure.myVar = req.session.myVar || 0;
-    req.session.myVar++;
-    res.json({
-        myVar: req.session.myVar,
-        session: req.session
-    });
-});
-
-app.get('/try-session-off', (req, res)=>{
-    delete req.session.myVar;
-    res.send('session清除')
-});
-
-
-
 
 
 app.get('/try-db', (req, res)=>{
@@ -64,19 +56,14 @@ app.get('/try-db', (req, res)=>{
 });
 
 
-app.get('/try-mem', (req, res)=>{
-    db.query('SELECT * FROM `member`')
-        .then(([results])=>{
-            res.json(results);
-            
-        })
-});
 
+app.use('/yen',require(__dirname +'/routes/yen'));
 
-
-
-
-
+app.use((req, res) => {
+    res.type('text/plain');
+    res.status('404');
+    res.send("路由錯了")
+})
 
 
 app.listen(3000, function () {
