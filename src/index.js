@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const MysqlStore = require('express-mysql-session')(session);
+const moment = require('moment-timezone');
 const db = require('./db_connect2');
+const sessionstore = new MysqlStore({}, db)
 const cors = require('cors')
 
 
@@ -21,6 +24,7 @@ app.use(session({
     saveUninitialized:false,
     resave: false,
     secret: '12345',
+    store: sessionstore,
     cookie: {
         maxAge: 1200000, //20分鐘
     }
@@ -34,13 +38,22 @@ app.get( '/', function(req, res) {
 });
 
 app.get('/try-session', (req, res)=>{
-    req.secure.my_var = req.session.my_var || 0;
-    req.session.my_var++;
+    req.secure.myVar = req.session.myVar || 0;
+    req.session.myVar++;
     res.json({
-        my_var: req.session.my_var,
+        myVar: req.session.myVar,
         session: req.session
     });
 });
+
+app.get('/try-session-off', (req, res)=>{
+    delete req.session.myVar;
+    res.send('session清除')
+});
+
+
+
+
 
 app.get('/try-db', (req, res)=>{
     db.query('SELECT * FROM `cart`')
