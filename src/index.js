@@ -35,17 +35,12 @@ app.use(session({
 }));
 
 
-// app.use(req,res,next){
-
-// }
-
 app.use(express.static('public'));
 
 
 app.get( '/', function(req, res) {
     res.send('Hello World');
 });
-
 
 app.get('/try-db', (req, res)=>{
     db.query('SELECT * FROM `cart`')
@@ -59,12 +54,14 @@ app.get('/try-db', (req, res)=>{
 
 app.use('/yen',require(__dirname +'/routes/yen'));
 
+
+
+
 app.use((req, res) => {
     res.type('text/plain');
     res.status('404');
     res.send("路由錯了")
 })
-
 
 app.listen(3000, function () {
     console.log('啟動 server 偵聽阜號 3000');
