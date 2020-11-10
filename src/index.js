@@ -50,21 +50,21 @@ app.get('/try-db', (req, res)=>{
         })
 });
 
-app.get('/try-list', (req, res)=>{
-    db.query('SELECT * FROM `product`')
-        .then(([results])=>{
-            res.json(results);
-            console.log('123')
-        })
-});
+// app.get('/try-list', (req, res)=>{
+//     db.query('SELECT * FROM `product`')
+//         .then(([results])=>{
+//             res.json(results);
+//             console.log('123')
+//         })
+// });
 
 
-app.get('/try-home', (req, res)=>{
-    db.query('SELECT * FROM `images`')
-    .then(([results])=>{
-        res.json(results);
-    })
-});
+// app.get('/try-home', (req, res)=>{
+//     db.query('SELECT * FROM `images`')
+//     .then(([results])=>{
+//         res.json(results);
+//     })
+// });
 
 
 app.use('/yen',require(__dirname +'/routes/yen'));
