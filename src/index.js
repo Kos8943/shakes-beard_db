@@ -66,11 +66,15 @@ app.get('/try-home', (req, res)=>{
     })
 });
 
+app.get('/try-shop', (req, res)=>{
+    db.query('SELECT * FROM `shops`')
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist')
+        })
+});
 
 app.use('/yen',require(__dirname +'/routes/yen'));
-
-
-
 
 
 app.use((req, res) => {
@@ -80,5 +84,5 @@ app.use((req, res) => {
 })
 
 app.listen(3000, function () {
-    console.log('啟動 server 偵聽阜號 3000');
+    console.log('啟動 server 偵聽阜號 3000');   
 });
