@@ -1,0 +1,32 @@
+<h5 class="card-title">管理者登入</h5>
+
+<form name="form1" onsubmit="checkForm(); return false;" novalidate>
+
+    <div class="form-group">
+        <label for="account">account</label>
+        <input type="account" class="form-control" id="account" name="account">
+    </div>
+
+    <div class="form-group">
+        <label for="password">password</label>
+        <input type="tel" class="form-control" id="password" name="password">
+    </div>
+
+    <button type="submit" class="btn btn-primary">登入</button>
+</form>
+
+
+<script>
+
+    function checkForm() {
+        const fd = new FormData(document.form1);
+        fetch('', {
+            method: 'POST',
+            body: fd
+        })
+            .then(r => r.json())
+            .then(obj => {
+                console.log(obj);
+            })
+    } 
+</script>
