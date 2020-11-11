@@ -77,6 +77,14 @@ app.get('/try-shop', (req, res)=>{
         })
 });
 
+app.get('/try-shop-page', (req, res)=>{
+    db.query(`SELECT COUNT(1) totalRows FROM shops`)
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist-page',results)
+        })
+});
+
 app.use('/yen',require(__dirname +'/routes/yen'));
 
 
