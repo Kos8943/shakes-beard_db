@@ -1,13 +1,19 @@
 const express = require('express');
 const router= express.Router();
+const jwt = require("jsonwebtoken");
 
 const db = require(__dirname + '/../db_connect2');
 const upload = require(__dirname + '/../upload-module');
+
 
 router.get('/', (req, res) => {
     res.send('yen')
 });
 
+
+
+
+//撈資料表
 router.get('/try-mem', (req, res)=>{
     db.query('SELECT * FROM `member`')
         .then(([results])=>{
@@ -17,11 +23,21 @@ router.get('/try-mem', (req, res)=>{
 });
 
 
+//表單post測試
+app.post('/post-test', (req, res) => {
+    console.log('ok!!!!!!!!!!!')
+    res.json(req.body)
+    // res.json(req.query)
+})
+
+
+
+//查看session
 router.get('/try-session', (req, res)=>{
     res.json( req.session);
-});
+})
 
-
+//session測試 
 router.get('/try-session-add', (req, res) => {
     req.session.myVar = req.session.myVar || 0;
     req.session.myVar++;
@@ -31,16 +47,23 @@ router.get('/try-session-add', (req, res) => {
     })
 })
 
+//清除session
 router.get('/try-session-off', (req, res)=>{
     delete req.session.myVar;
     delete req.session.admin;
     res.send('session清除')
 });
 
+
+
+//render 登入表單
 router.get('/test-admin-session' ,(req, res) => {
     res.render('member/log')
 })
 
+
+//連線資料庫 比對帳號密碼是否存在 有的話傳回[rs] 
+//若有拿到資料(長度不為0) 則將資料設定成為session  
 router.post('/test-admin-session', upload.none(), async (req, res) => {
     const output = {
         body: req.body,
@@ -54,6 +77,7 @@ router.post('/test-admin-session', upload.none(), async (req, res) => {
     }
     res.send(req.session);
 })
+
 
 
 module.exports = router;
