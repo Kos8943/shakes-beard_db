@@ -50,6 +50,17 @@ app.get('/try-db', (req, res)=>{
         })
 });
 
+app.get('/try-member', (req, res)=>{
+    db.query('SELECT * FROM `member`')
+        .then(([results])=>{
+            res.json(results);
+            console.log('123')
+        })
+});
+
+
+
+
 app.listen(3000, function () {
     console.log('啟動 server 偵聽阜號 3000');
 });
