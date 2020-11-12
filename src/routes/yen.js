@@ -47,10 +47,10 @@ router.post('/try-log', async (req, res) => {
     };
     console.log('req', req.body) //
 
-    const sql = "SELECT `sid`, `authAccount` FROM `member` WHERE authAccount=?"
+    const sql = "SELECT `sid`, `authAccount`,`name`, `email`, `phone` FROM `member` WHERE authAccount=? AND authPassword=?"
     console.log('sql', sql)
 
-    const [rs] = await dby.query(sql, [req.body.account]); //SELECT出來的是一個陣列
+    const [rs] = await dby.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
     console.log(rs[0])
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
