@@ -22,7 +22,6 @@
     "nodemon": "^2.0.6",
     "moment-timezone": "^0.5.31",
     "multer": "^1.4.2",
-    "mysql2": "^2.2.5",
     "uuidv4": "^6.2.5"
   }
 }

@@ -51,7 +51,7 @@ app.get('/try-db', (req, res)=>{
 });
 
 app.get('/try-list', (req, res)=>{
-    db.query('SELECT * FROM `product`')
+    db.query('SELECT * FROM `product-new`')
         .then(([results])=>{
             res.json(results);
             console.log('123')
@@ -68,6 +68,8 @@ app.get('/try-home', (req, res)=>{
 
 
 app.use('/yen',require(__dirname +'/routes/yen'));
+
+app.use('/yu',require(__dirname +'/routes/yu'));
 
 
 
