@@ -1,5 +1,5 @@
 const express = require('express');
-const router= express.Router();
+const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 
@@ -8,48 +8,62 @@ const dby = require(__dirname + '/../db_connectY');
 const upload = require(__dirname + '/../upload-module');
 
 
+router.use(express.urlencoded({ extended: false }));
+router.use(express.json());
+
+
+
+
 router.get('/', (req, res) => {
     res.send('yen')
 });
 
-
-
-
-//撈資料表
-router.get('/try-mem', (req, res)=>{
+router.get('/try-mem', (req, res) => {
     // db.query('SELECT * FROM `member`')
     dby.query('SELECT * FROM `member`')
-        .then(([results])=>{
+        .then(([results]) => {
             res.json(results);
-            
         })
+
+});
+
+
+//撈資料表 //資料修改
+router.get('/update', (req, res) => {
+    // db.query('SELECT * FROM `member`')
+    dby.query('SELECT * FROM `member`')
+        .then(([results]) => {
+            res.json(results);
+        })
+
 });
 
 
 //登入判斷
-router.post('/try-mem', async (req, res)=>{
+router.post('/try-log', async (req, res) => {
     const output = {
         body: req.body,
         success: false,
-      };
-      console.log(output) //
-    
-      const sql = "SELECT `sid`, `authAccount`, `authPassword`, `name`, `email`, `phone`, `birth`, `city`, `dist`, `address`, `card`, `cardDate`, `cvc`, `invoice`, `favorite` FROM `member` WHERE authAccount=? AND authPassword=?"
-      console.log('sql',sql)
+    };
+    console.log('req', req.body) //
 
-      const [rs] = await db.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
-      console.log(rs[0].authAccount)
+    const sql = "SELECT `sid`, `authAccount` FROM `member` WHERE authAccount=?"
+    console.log('sql', sql)
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if (rs[0].authAccount == req.body.account) {
+    const [rs] = await dby.query(sql, [req.body.account]); //SELECT出來的是一個陣列
+    console.log(rs[0])
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if (rs[0].authAccount == req.body.account) {
         req.session.admin = rs[0];
         output.success = true; //登入成功
-      
-        output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
-      }
-      res.json(output); //server端把output轉換成json的字串給用戶端(會自己加Content-Type)
-    });
-    
+        console.log('ok')
+        // output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
+        console.log('token')
+    }
+    res.json(output); //server端把output轉換成json的字串給用戶端(會自己加Content-Type)
+});
+
 
 
 //表單post測試
@@ -62,8 +76,8 @@ router.post('/post-test', (req, res) => {
 
 
 //查看session
-router.get('/try-session', (req, res)=>{
-    res.json( req.session);
+router.get('/try-session', (req, res) => {
+    res.json(req.session);
 })
 
 //session測試 
@@ -77,7 +91,7 @@ router.get('/try-session-add', (req, res) => {
 })
 
 //清除session
-router.get('/try-session-off', (req, res)=>{
+router.get('/try-session-off', (req, res) => {
     delete req.session.myVar;
     delete req.session.admin;
     res.send('session清除')
@@ -86,7 +100,7 @@ router.get('/try-session-off', (req, res)=>{
 
 
 //render 登入表單
-router.get('/test-admin-session' ,(req, res) => {
+router.get('/test-admin-session', (req, res) => {
     res.render('member/log')
 })
 
@@ -102,7 +116,7 @@ router.post('/test-admin-session', upload.none(), async (req, res) => {
     const [rs] = await db.query(sql, [req.body.account, req.body.password]);  //SELECT出來的是一個陣列
     if (rs.length) {
         req.session.admin = [rs][0];
-        output.success = true       
+        output.success = true
     }
     res.send(req.session);
 })
