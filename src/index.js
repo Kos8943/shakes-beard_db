@@ -78,11 +78,6 @@ app.get('/try-shop', (req, res)=>{
         })
 });
 
-app.use('/yen',require(__dirname +'/routes/yen'));
-
-app.use('/yu',require(__dirname +'/routes/yu'));
-
-
 app.get('/try-shop-page', (req, res)=>{
     db.query(`SELECT COUNT(1) totalRows FROM shops`)
         .then(([results])=>{
@@ -90,6 +85,28 @@ app.get('/try-shop-page', (req, res)=>{
             console.log('shoplist-page',results)
         })
 });
+
+app.get('/try-hair', (req, res)=>{
+    // db.query('SELECT * FROM `shops` LIMIT 2')
+    db.query('SELECT * FROM `shops` WHERE `shop_cate_tag`="男士理髮"')
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist')
+        })
+});
+
+app.get('/try-beard', (req, res)=>{
+    // db.query('SELECT * FROM `shops` LIMIT 2')
+    db.query('SELECT * FROM `shops` WHERE `shop_cate_tag`="男士修容"')
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist')
+        })
+});
+
+app.use('/yen',require(__dirname +'/routes/yen'));
+
+app.use('/yu',require(__dirname +'/routes/yu'));
 
 app.use((req, res) => {
     res.type('text/plain');
