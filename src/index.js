@@ -91,9 +91,6 @@ app.get('/try-shop-page', (req, res)=>{
         })
 });
 
-app.use('/yen',require(__dirname +'/routes/yen'));
-
-
 app.use((req, res) => {
     res.type('text/plain');
     res.status('404');
