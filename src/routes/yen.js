@@ -23,6 +23,32 @@ router.get('/try-mem', (req, res)=>{
 });
 
 
+//登入判斷
+router.post('/try-mem', async (req, res)=>{
+    const output = {
+        body: req.body,
+        success: false,
+      };
+      console.log(output) //
+    
+      const sql = "SELECT `sid`, `authAccount`, `authPassword`, `name`, `email`, `phone`, `birth`, `city`, `dist`, `address`, `card`, `cardDate`, `cvc`, `invoice`, `favorite` FROM `member` WHERE authAccount=? AND authPassword=?"
+      console.log('sql',sql)
+
+      const [rs] = await db.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
+      console.log(rs[0].authAccount)
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if (rs[0].authAccount == req.body.account) {
+        req.session.admin = rs[0];
+        output.success = true; //登入成功
+      
+        output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
+      }
+      res.json(output); //server端把output轉換成json的字串給用戶端(會自己加Content-Type)
+    });
+    
+
+
 //表單post測試
 router.post('/post-test', (req, res) => {
     console.log('ok!!!!!!!!!!!')
