@@ -77,13 +77,11 @@ app.get('/try-shop', (req, res)=>{
         })
 });
 
-<<<<<<< HEAD
 app.use('/yen',require(__dirname +'/routes/yen'));
 
 app.use('/yu',require(__dirname +'/routes/yu'));
 
 
-=======
 app.get('/try-shop-page', (req, res)=>{
     db.query(`SELECT COUNT(1) totalRows FROM shops`)
         .then(([results])=>{
@@ -91,7 +89,6 @@ app.get('/try-shop-page', (req, res)=>{
             console.log('shoplist-page',results)
         })
 });
->>>>>>> 3755d923cd542a894d44bf7c003c201980131c5d
 
 app.use('/yen',require(__dirname +'/routes/yen'));
 
