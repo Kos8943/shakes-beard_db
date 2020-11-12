@@ -2,7 +2,9 @@ const express = require('express');
 const router= express.Router();
 const jwt = require("jsonwebtoken");
 
+
 const db = require(__dirname + '/../db_connect2');
+const dby = require(__dirname + '/../db_connectY');
 const upload = require(__dirname + '/../upload-module');
 
 
@@ -15,7 +17,8 @@ router.get('/', (req, res) => {
 
 //撈資料表
 router.get('/try-mem', (req, res)=>{
-    db.query('SELECT * FROM `member`')
+    // db.query('SELECT * FROM `member`')
+    dby.query('SELECT * FROM `member`')
         .then(([results])=>{
             res.json(results);
             
