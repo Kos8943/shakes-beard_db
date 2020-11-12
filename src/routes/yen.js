@@ -3,7 +3,6 @@ const router= express.Router();
 const jwt = require("jsonwebtoken");
 
 const db = require(__dirname + '/../db_connect2');
-const dby = require(__dirname + '/../db_connectY');
 const upload = require(__dirname + '/../upload-module');
 
 
@@ -23,16 +22,6 @@ router.get('/try-mem', (req, res)=>{
         })
 });
 
-//撈資料表 Mac
-router.get('/try-mem-mac', (req, res)=>{
-    dby.query('SELECT * FROM `member`')
-        .then(([results])=>{
-            res.json(results);
-            
-        })
-});
-
-
 
 //登入判斷
 router.post('/try-mem', async (req, res)=>{
@@ -45,8 +34,7 @@ router.post('/try-mem', async (req, res)=>{
       const sql = "SELECT `sid`, `authAccount`, `authPassword`, `name`, `email`, `phone`, `birth`, `city`, `dist`, `address`, `card`, `cardDate`, `cvc`, `invoice`, `favorite` FROM `member` WHERE authAccount=? AND authPassword=?"
       console.log('sql',sql)
 
-    //   const [rs] = await db.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
-      const [rs] = await dby.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
+      const [rs] = await db.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
       console.log(rs[0].authAccount)
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

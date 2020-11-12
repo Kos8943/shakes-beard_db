@@ -9,3 +9,4 @@ const upload = require(__dirname + '/../upload-module');
 router.get('/', (req, res) => {
     res.send('yu')
 });
+module.exports = router;
