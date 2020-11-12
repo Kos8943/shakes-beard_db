@@ -24,7 +24,7 @@ router.get('/try-mem', (req, res)=>{
 
 
 //表單post測試
-app.post('/post-test', (req, res) => {
+router.post('/post-test', (req, res) => {
     console.log('ok!!!!!!!!!!!')
     res.json(req.body)
     // res.json(req.query)
