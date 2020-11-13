@@ -3,6 +3,7 @@ const session = require('express-session');
 const MysqlStore = require('express-mysql-session')(session);
 const moment = require('moment-timezone');
 const db = require('./db_connect2');
+const dby = require('./db_connectY');
 const sessionstore = new MysqlStore({}, db)
 const upload = require(__dirname + '/upload-module');
 const cors = require('cors')
@@ -53,7 +54,7 @@ app.get('/try-db', (req, res)=>{
 
 
 app.get('/try-list', (req, res)=>{
-    db.query('SELECT * FROM `product`')
+    db.query('SELECT * FROM `product-new`')
         .then(([results])=>{
             res.json(results);
             console.log('123')
@@ -85,8 +86,27 @@ app.get('/try-shop-page', (req, res)=>{
         })
 });
 
+app.get('/try-hair', (req, res)=>{
+    // db.query('SELECT * FROM `shops` LIMIT 2')
+    db.query('SELECT * FROM `shops` WHERE `shop_cate_tag`="男士理髮"')
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist')
+        })
+});
+
+app.get('/try-beard', (req, res)=>{
+    // db.query('SELECT * FROM `shops` LIMIT 2')
+    db.query('SELECT * FROM `shops` WHERE `shop_cate_tag`="男士修容"')
+        .then(([results])=>{
+            res.json(results);
+            console.log('shoplist')
+        })
+});
+
 app.use('/yen',require(__dirname +'/routes/yen'));
 
+app.use('/yu',require(__dirname +'/routes/yu'));
 
 app.use((req, res) => {
     res.type('text/plain');
