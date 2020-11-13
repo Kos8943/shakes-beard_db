@@ -29,30 +29,57 @@ router.get("/update", (req, res) => {
 });
 
 //登入判斷
-router.post("/try-log", async (req, res) => {
-  const output = {
-    body: req.body,
-    success: false,
-    date: new Date(),
-  };
-  console.log("req", req.body); //
+router.post('/try-log', async (req, res) => {
+    const output = {
+        body: req.body,
+        success: false,
+    };
 
-  const sql =
-    "SELECT `sid`, `authAccount`,`name`, `email`, `phone` FROM `member` WHERE authAccount=? AND authPassword=?";
-  console.log("sql", sql);
+    const auth = {
+        success: false,
+    }
+    console.log('req', req.body) //
 
-  const [rs] = await db.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
-  console.log(rs[0]);
+    const sql = "SELECT `sid`,`authAccount`,`authPassword`,`name`, `email`, `phone` FROM `member` WHERE authAccount=? AND authPassword=?"
+    console.log('sql', sql)
 
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  if (rs[0].authAccount == req.body.account) {
-    req.session.admin = rs[0];
-    output.success = true; //登入成功
-    console.log("ok");
-    // output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
-    console.log("token");
-  }
-  res.json(output); //server端把output轉換成json的字串給用戶端(會自己加Content-Type)
+    //透過使用者輸入的帳密 判斷是否有這筆使用者資料
+    const [rs] = await dby.query(sql, [req.body.account, req.body.password]); //SELECT出來的是一個陣列
+    console.log('rs=', rs[0])
+
+    //再次判斷（應該可以不用） 
+    if (rs.length && rs[0].authAccount == req.body.account && rs[0].authPassword == req.body.password) {
+        // req.session.admin = rs[0];
+        // output.success = true; //登入成功
+        // output.name = rs[0].name
+        // output.sid = rs[0].sid
+        auth.sid = rs[0].sid
+        auth.account = rs[0].account
+        auth.name = rs[0].name
+        auth.sid = rs[0].sid
+        auth.success = true; //登入成功
+        console.log('ok')
+        // output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
+        // console.log('token')
+    } else {
+        output.success = false
+
+    }
+
+
+
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // if (rs[0].authAccount == req.body.account) {
+    //     req.session.admin = rs[0];
+    //     output.success = true; //登入成功
+    //     console.log('ok')
+    //     // output.token = jwt.sign({ ...rs[0] }, process.env.TOKEN_SECRECT);
+    //     console.log('token')
+    // } else {
+    //     output.success = false
+    // }
+    res.json(auth); //server端把output轉換成json的字串給用戶端(會自己加Content-Type)
 });
 
 //表單post測試
