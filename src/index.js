@@ -50,6 +50,14 @@ app.get('/try-db', (req, res)=>{
         })
 });
 
+app.get('/try-payment', (req, res)=>{
+    db.query('SELECT * FROM `payment`')
+        .then(([results])=>{
+            res.json(results);
+            console.log('123')
+        })
+});
+
 
 
 app.get('/try-list', (req, res)=>{
