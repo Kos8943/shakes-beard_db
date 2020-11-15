@@ -18,11 +18,14 @@
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.4",
     "express-session": "^1.17.1",
-    "mysql2": "^2.2.5",
-    "nodemon": "^2.0.6",
+<<<<<<< HEAD
+=======
+    "jsonwebtoken": "^8.5.1",
+>>>>>>> 422ea0eec05d8af3046e656accd821f91d2ebdd4
     "moment-timezone": "^0.5.31",
     "multer": "^1.4.2",
     "mysql2": "^2.2.5",
+    "nodemon": "^2.0.6",
     "uuidv4": "^6.2.5"
   }
 }
