@@ -58,11 +58,11 @@ app.get('/try-db', (req, res)=>{
         })
 });
 
-app.get('/try-payment', (req, res)=>{
-    db.query('SELECT * FROM `payment`')
+app.post('/try-member', (req, res)=>{
+    db.query('SELECT * FROM `member`')
         .then(([results])=>{
             res.json(results);
-            console.log('123')
+            console.log(results)
         })
 });
 
