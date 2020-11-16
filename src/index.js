@@ -119,6 +119,26 @@ app.get('/try-beard', (req, res)=>{
         })
 });
 
+app.post('/try-order', async (req, res)=>{
+    // db.query('SELECT * FROM `shops` LIMIT 2')
+    console.log("123",req.body)
+    console.log("req.body.payment123",req.body.payment[0].img)
+    const data = {
+        recipient: req.body.recipient,
+        img: req.body.payment[0].img,
+        protuctname: req.body.payment[0].name,
+        type:req.body.payment[0].type,
+        amount: req.body.payment[0].amount,
+        unitprice:req.body.payment[0].price,
+        total:req.body.payment[0].price,
+    };
+    console.log(data)
+    // data.created_at = new Date();
+    const sql = "INSERT INTO `ordercheck` set ?"
+    const [{affectedRows, insertId}] = await db.query(sql, [ data ]);
+    // [{"fieldCount":0,"affectedRows":1,"insertId":860,"info":"","serverStatus":2,"warningStatus":1},null]
+});
+
 
 
 app.use('/yen',require(__dirname +'/routes/yen'));
