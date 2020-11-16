@@ -93,7 +93,7 @@ router.post("/sign", async (req, res) => {
       insertId,
     });
 
-    newAuth.sucess = true;
+    newAuth.success = true;
     newAuth.authAccount = data.authAccount;
     newAuth.name = data.name;
     newAuth.sid = insertId;
@@ -122,7 +122,7 @@ router.post("/member-data", async (req, res) => {
 //資料修改 ok
 router.post("/data-update", async (req, res) => {
   console.log("資料修改--------------------------");
-  const memberUpdate = {};
+  const success = {};
   console.log("req.body=", req.body);
 
   const sql =
@@ -140,8 +140,7 @@ router.post("/data-update", async (req, res) => {
     township: req.body.township,
     address: req.body.address,
   };
-
-  const updataSql = "UPDATE `member` SET ? WHERE `sid`=?";
+ const updataSql = "UPDATE `member` SET ? WHERE `sid`=?";
   const [{ affectedRows, changedRows }] = await db.query(updataSql, [
     data,
     req.body.sid.sid,
@@ -156,8 +155,35 @@ router.post("/data-update", async (req, res) => {
     changedRows,
   });
 
-  res.json(data);
-});
+if(rs[0].name == data.name &&rs[0].email == data.email&&rs[0].phone== data.phone&&rs[0].birth==data.birth&&rs[0].country==data.country&&rs[0].township==data.township&&rs[0].address==data.address){
+  success.success=false
+  res.json(success)
+}else{
+  const [{ affectedRows, changedRows }] = await db.query(updataSql, [
+    data,
+    req.body.sid.sid,
+  ]);
+  // {"fieldCount":0,"affectedRows":1,"insertId":0,"info":"Rows matched: 1  Changed: 0  Warnings: 0","serverStatus":2,"warningStatus":0,"changedRows":0}
+
+  console.log("updata=", data);
+  success.success=true
+  console.log({
+    success: !!changedRows,
+    affectedRows,
+    changedRows,
+  });
+
+  res.json(success);
+
+}
+
+
+})
+
+
+
+
+
 
 //--------------------------------------------------------------------------------------------------------------------------------
 //密碼修改
