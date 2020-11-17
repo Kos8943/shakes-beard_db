@@ -58,18 +58,26 @@ app.get('/try-db', (req, res)=>{
         })
 });
 
-app.post('/try-member', (req, res)=>{
-    db.query('SELECT * FROM `member`')
-        .then(([results])=>{
-            res.json(results);
-            console.log(results)
-        })
+app.post('/try-member', async (req, res)=>{
+   
+    const sql = "SELECT `sid`, `authAccount`, `authPassword`, `name`, `email`, `phone`, `birth`, `country`, `township`, `address`, `card`, `cardDate`, `cvc`, `invoice`, `barCode`, `favorite` FROM `member` WHERE sid=?"
+    const [rs] = await db.query(sql, [req.body.sid])
+    console.log(rs[0])
+    res.json(rs)
 });
 
 
 
 app.get('/try-list', (req, res)=>{
     db.query('SELECT * FROM `product-new`')
+        .then(([results])=>{
+            res.json(results);
+            console.log('123')
+        })
+});
+
+app.get('/try-ordercheck', (req, res)=>{
+    db.query('SELECT * FROM `ordercheck`')
         .then(([results])=>{
             res.json(results);
             console.log('123')
@@ -122,20 +130,24 @@ app.get('/try-beard', (req, res)=>{
 app.post('/try-order', async (req, res)=>{
     // db.query('SELECT * FROM `shops` LIMIT 2')
     console.log("123",req.body)
-    console.log("req.body.payment123",req.body.payment[0].img)
+    console.log("req.body.payment123",req.body.payment.toString())
     const data = {
         recipient: req.body.recipient,
         img: req.body.payment[0].img,
-        protuctname: req.body.payment[0].name,
+        protuctname: req.body.payment[0].name ,
         type:req.body.payment[0].type,
         amount: req.body.payment[0].amount,
         unitprice:req.body.payment[0].price,
         total:req.body.payment[0].price,
+        data: new Date(),
+        ordersid: moment().unix()
     };
-    console.log(data)
+    // console.log(data)
     // data.created_at = new Date();
+
     const sql = "INSERT INTO `ordercheck` set ?"
     const [{affectedRows, insertId}] = await db.query(sql, [ data ]);
+
     // [{"fieldCount":0,"affectedRows":1,"insertId":860,"info":"","serverStatus":2,"warningStatus":1},null]
 });
 
