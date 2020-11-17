@@ -128,6 +128,8 @@ app.get('/try-beard', (req, res)=>{
 });
 
 app.post('/try-order', async (req, res)=>{
+    const fm = "YYYY-MM-DD"
+    const now = moment(new Date())
     // db.query('SELECT * FROM `shops` LIMIT 2')
     console.log("123",req.body)
     console.log("req.body.payment123",req.body.payment.toString())
@@ -139,10 +141,10 @@ app.post('/try-order', async (req, res)=>{
         amount: req.body.payment[0].amount,
         unitprice:req.body.payment[0].price,
         total:req.body.payment[0].price,
-        data: new Date(),
+        data: now.format(fm),
         ordersid: moment().unix()
     };
-    // console.log(data)
+    console.log("data:",data.data)
     // data.created_at = new Date();
 
     const sql = "INSERT INTO `ordercheck` set ?"
