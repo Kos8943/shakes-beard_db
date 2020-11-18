@@ -153,6 +153,33 @@ app.post('/try-order', async (req, res)=>{
     // [{"fieldCount":0,"affectedRows":1,"insertId":860,"info":"","serverStatus":2,"warningStatus":1},null]
 });
 
+app.post('/try-reservation', async (req, res)=>{
+    const fm = "YYYY-MM-DD"
+    const now = moment(new Date())
+    // console.log("req.body.payment123",req.body.payment.toString())
+    console.log("req.body",req.body)
+    console.log("req.body.reserveShopName",req.body.reserveShopName)
+    const data = {
+        reserveNum: req.body.reserveNum,
+        // img: req.body.payment[0].img,
+        reserveShopId: req.body.reserveShopId,
+        reserveShopName:req.body.reserveShopName,
+        reserveServiceId: req.body.reserveServiceId,
+        reserveServiceName:req.body.reserveServiceName,
+        reserveServiceTime:req.body.reserveServiceTime,
+        reservePerson:req.body.reservePerson,
+        reserveMobile1:req.body.reserveMobile1,
+        reserveMobile2:req.body.reserveMobile2,
+        reserveEmail:req.body.reserveEmail,
+        data: now.format(fm),
+        ordersid: moment().unix()
+    };
+    console.log("data:",data.data)
+    // data.created_at = new Date();
+
+    const sql = "INSERT INTO `reservation` set ?"
+    const [{affectedRows, insertId}] = await db.query(sql, [ data ]);
+});
 
 
 app.use('/yen',require(__dirname +'/routes/yen'));
